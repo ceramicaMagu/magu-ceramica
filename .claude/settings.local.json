@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build:*)",
+      "Bash(npm run build:next:*)",
+      "Bash(timeout 10 powershell:*)",
+      "Bash(pnpm tsc:*)",
+      "Bash(npm install:*)",
+      "Bash(timeout 15 pnpm dev:*)",
+      "Bash(npx tsc:*)"
+    ]
+  }
+}

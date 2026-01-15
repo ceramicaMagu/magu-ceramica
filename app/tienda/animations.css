@@ -1,0 +1,71 @@
+/* ========================================
+   TIENDA PAGE ANIMATIONS
+   ======================================== */
+
+/* Smooth Image Zoom Animation for Products */
+.tienda-image-zoom-container {
+    overflow: hidden;
+    position: relative;
+}
+
+.tienda-image-zoom {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform: scale(1);
+    transform-origin: center center;
+    will-change: transform;
+}
+
+.tienda-image-zoom-container:hover .tienda-image-zoom {
+    transform: scale(1.08);
+}
+
+/* Product Card Hover */
+.tienda-product-card-hover {
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.tienda-product-card-hover:hover {
+    transform: translateY(-4px);
+}
+
+/* Fade In Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+    .tienda-image-zoom-container:hover .tienda-image-zoom {
+        transform: scale(1.05);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tienda-image-zoom,
+    .tienda-product-card-hover {
+        transition: none !important;
+    }
+
+    .tienda-image-zoom-container:hover .tienda-image-zoom {
+        transform: scale(1) !important;
+    }
+
+    .fade-in-up {
+        animation: none !important;
+        opacity: 1 !important;
+    }
+}
