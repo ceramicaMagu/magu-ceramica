@@ -98,7 +98,7 @@ const AboutPage = () => {
                             </Box>
                             <Box sx={classes.bioContent} className="fade-in-up-delay-1">
                                 <Typography variant="h2" sx={classes.sectionTitle}>
-                                    Hola, soy Magu
+                                    Hola, soy Cintia
                                 </Typography>
                                 <Typography sx={classes.paragraph}>
                                     Mi viaje con la cerámica comenzó hace más de 5 años como un escape del ritmo
