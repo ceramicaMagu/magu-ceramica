@@ -7,7 +7,6 @@ import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import classes from "./classes";
 import { HomeGlobalStyles } from "@/app/(home)/HomeStyles";
 import { hexToRgba } from "@/utils/style";
-import { SOCIAL_NETWORKS } from "@/constants/social";
 import StructuredData from "@/app/components/StructuredData";
 import { createBreadcrumbSchema, createFAQPageSchema } from "@/constants/seo";
 import { useAppSelector } from "@/state/redux/store";
@@ -34,25 +33,25 @@ const FAQPage = () => {
         {
             id: 1,
             question: "¿Cómo puedo realizar un pedido?",
-            answer: "Puedes realizar tu pedido directamente a través de WhatsApp haciendo clic en el botón 'Contactar por WhatsApp' o agregando productos al carrito en nuestra tienda online. Te responderemos a la brevedad para coordinar los detalles de tu compra.",
+            answer: "Puedes realizar tu pedido directamente a través de WhatsApp haciendo clic en el botón 'Contactar por WhatsApp' o agregando productos al carrito en la tienda online. Te responderé a la brevedad para coordinar los detalles de tu compra.",
             category: "Pedidos"
         },
         {
             id: 2,
             question: "¿Aceptan pedidos personalizados?",
-            answer: "¡Sí! Nos encanta crear piezas únicas según tus necesidades. Contáctanos por WhatsApp con tu idea y trabajaremos juntos para diseñar la pieza perfecta para ti. Ten en cuenta que los pedidos personalizados pueden tardar entre 2-4 semanas dependiendo de la complejidad.",
+            answer: "¡Sí! Me encanta crear piezas únicas según tus necesidades. Comunicate por WhatsApp con tu idea y trabajaremos juntos para diseñar la pieza perfecta para ti. Ten en cuenta que los pedidos personalizados pueden tardar entre 2-4 semanas dependiendo de la complejidad.",
             category: "Pedidos"
         },
         {
             id: 3,
             question: "¿Cuál es el tiempo de producción?",
-            answer: "Cada pieza es hecha a mano bajo pedido. El tiempo de producción es generalmente de 1-2 semanas para piezas estándar y 2-4 semanas para pedidos personalizados. Te confirmaremos el tiempo exacto al momento de realizar tu pedido.",
+            answer: "Cada pieza es hecha a mano bajo pedido. El tiempo de producción es generalmente de 1-2 semanas para piezas estándar y 2-4 semanas para pedidos personalizados. Te confirmo el tiempo exacto al momento de realizar tu pedido.",
             category: "Pedidos"
         },
         {
             id: 4,
             question: "¿Puedo cancelar o modificar mi pedido?",
-            answer: "Sí, puedes cancelar o modificar tu pedido siempre que no haya comenzado el proceso de producción. Contáctanos lo antes posible por WhatsApp para gestionar cualquier cambio en tu orden.",
+            answer: "Sí, puedes cancelar o modificar tu pedido siempre que no haya comenzado el proceso de producción. Comunicate lo antes posible por WhatsApp para gestionar cualquier cambio en tu orden.",
             category: "Pedidos"
         },
 
@@ -66,19 +65,19 @@ const FAQPage = () => {
         {
             id: 6,
             question: "¿Los productos son aptos para lavavajillas y microondas?",
-            answer: "Sí, nuestras piezas están hechas con arcilla de alta temperatura y esmaltes certificados, por lo que son seguras para uso en lavavajillas y microondas. Sin embargo, recomendamos el lavado a mano para prolongar su vida útil y mantener su belleza original.",
+            answer: "Sí, las piezas están hechas con arcilla de baja temperatura y esmaltes aptos para vajilla. son aptas para microondas... siempre y cuando no tengan detalles en oro, cobre o accesorios de metal.",
             category: "Productos"
         },
         {
             id: 7,
             question: "¿Qué materiales utilizan?",
-            answer: "Trabajamos con arcillas de gres de alta calidad y esmaltes cerámicos no tóxicos, aptos para contacto con alimentos. Todos nuestros materiales son seguros, sostenibles y provienen de proveedores certificados.",
+            answer: "Trabajo con arcilla de baja temperatura y esmaltes cerámicos aptos para vajilla.",
             category: "Productos"
         },
         {
             id: 8,
             question: "¿Tienen stock disponible o todo es bajo pedido?",
-            answer: "Tenemos algunas piezas en stock listas para envío inmediato, pero la mayoría de nuestros productos se elaboran bajo pedido para garantizar la frescura y calidad de cada pieza. Consúltanos disponibilidad por WhatsApp.",
+            answer: "Tengo algunas piezas en stock listas para envío inmediato, pero la mayoría de nuestros productos se elaboran bajo pedido para garantizar la frescura y calidad de cada pieza. Consulta disponibilidad por WhatsApp.",
             category: "Productos"
         },
 
@@ -86,13 +85,13 @@ const FAQPage = () => {
         {
             id: 9,
             question: "¿Realizan envíos a todo el país?",
-            answer: "Sí, enviamos a toda Argentina. Trabajamos con correos confiables y embalamos cada pieza con extremo cuidado para que llegue en perfectas condiciones a tu hogar.",
+            answer: "Sí, hago envíos a toda Argentina. Trabajo con correos confiables y embalamos cada pieza con extremo cuidado para que llegue en perfectas condiciones a tu hogar.",
             category: "Envíos"
         },
         {
             id: 10,
             question: "¿Cuánto cuesta el envío?",
-            answer: "El costo de envío varía según el destino y el peso del paquete. Te cotizaremos el envío exacto al momento de confirmar tu pedido. Para compras superiores a $50.000, el envío es gratis dentro de Córdoba Capital.",
+            answer: "El costo de envío varía según el destino y el peso del paquete. Te cotizo el envío exacto al momento de confirmar tu pedido. Para compras superiores a $50.000, el envío es gratis dentro de Córdoba Capital.",
             category: "Envíos"
         },
         {
@@ -104,7 +103,7 @@ const FAQPage = () => {
         {
             id: 12,
             question: "¿Puedo retirar mi pedido personalmente?",
-            answer: "¡Por supuesto! Si estás en Córdoba, puedes coordinar con nosotros para retirar tu pedido en nuestro taller. Te enviaremos la dirección exacta y horarios disponibles por WhatsApp.",
+            answer: "¡Por supuesto! Si estás en Córdoba, podemos coordinar para retirar tu pedido en el taller. Te envío la dirección exacta y horarios disponibles por WhatsApp.",
             category: "Envíos"
         },
 
@@ -112,25 +111,25 @@ const FAQPage = () => {
         {
             id: 13,
             question: "¿Cómo debo cuidar mis piezas de cerámica?",
-            answer: "Aunque nuestras piezas son resistentes, recomendamos: lavar a mano con detergente suave, evitar cambios bruscos de temperatura, no usar esponjas abrasivas y secar bien después de lavar. Con estos cuidados, tus piezas durarán muchos años.",
+            answer: "Aunque las piezas son resistentes, recomiendo: lavar a mano con detergente suave, evitar cambios bruscos de temperatura, no usar esponjas abrasivas y secar bien después de lavar. Con estos cuidados, tus piezas durarán muchos años.",
             category: "Cuidados"
         },
         {
             id: 14,
             question: "¿Qué hago si mi pieza se rompe?",
-            answer: "La cerámica es un material noble pero delicado. Si tu pieza sufre algún daño, puedes intentar repararla con pegamento especial para cerámica (resina epoxi). Aunque no recomendamos usar piezas reparadas para alimentos, pueden seguir siendo hermosos objetos decorativos.",
+            answer: "La cerámica es un material noble pero delicado. Si tu pieza sufre algún daño, puedes intentar repararla con pegamento especial para cerámica (resina epoxi). Aunque no recomiendo usar piezas reparadas para alimentos, pueden seguir siendo hermosos objetos decorativos.",
             category: "Cuidados"
         },
         {
             id: 15,
             question: "¿Las piezas cambian de color con el tiempo?",
-            answer: "No, nuestros esmaltes son permanentes y no se decoloran con el uso ni el lavado. Sin embargo, como toda cerámica, pueden desarrollar pequeñas marcas de uso con el tiempo, lo que les da carácter y cuenta su historia.",
+            answer: "No, los esmaltes son permanentes y no se decoloran con el uso ni el lavado. Sin embargo, como toda cerámica, pueden desarrollar pequeñas marcas de uso con el tiempo, lo que les da carácter y cuenta su historia.",
             category: "Cuidados"
         },
         {
             id: 16,
             question: "¿Son seguras para niños?",
-            answer: "Sí, nuestras piezas son completamente seguras y no tóxicas. Sin embargo, al ser cerámica, pueden romperse si se caen. Para niños pequeños, recomendamos supervisión de adultos durante su uso.",
+            answer: "Sí, las piezas son completamente seguras y no tóxicas. Sin embargo, al ser cerámica, pueden romperse si se caen. Para niños pequeños, recomiendo supervisión de adultos durante su uso.",
             category: "Cuidados"
         }
     ];

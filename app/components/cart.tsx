@@ -1,5 +1,4 @@
 'use client'
-import { useState } from 'react';
 import { Badge, Box, Button, Drawer, IconButton, Typography } from '@mui/material';
 import { RootState } from "@/state/redux/store";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,20 +9,20 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import LocalMallIcon from '@mui/icons-material/LocalMall';
-import { setCartShop } from '@/state/redux/shop';
+import { setCartShop, setCartOpen } from '@/state/redux/shop';
 import { SOCIAL_NETWORKS } from '@/constants/social';
 
 const Cart = () => {
     const cart = useSelector((state: RootState) => state.shop.cart)
+    const isCartOpen = useSelector((state: RootState) => state.shop.isCartOpen)
     const siteConfig = useSelector((state: RootState) => state.auth.siteConfig)
     const dispatch = useDispatch()
-    const [open, setOpen] = useState(false)
 
     // Usar WhatsApp de config (solo si está configurado)
     const whatsappNumber = siteConfig.socialMedia.whatsapp
 
     const handleOpen = () => {
-        setOpen(!open)
+        dispatch(setCartOpen(!isCartOpen))
     }
 
     const handleDeleteItem = (id: number) => () => {
@@ -119,7 +118,7 @@ const Cart = () => {
 
             <Drawer
                 anchor={'right'}
-                open={open}
+                open={isCartOpen}
                 onClose={handleOpen}
             >
                 <Box sx={classes.boxTitleCart}>

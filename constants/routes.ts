@@ -8,8 +8,8 @@ export const ROUTES = [
         href: "/tienda",
     },
     {
-        label: "Nosotros",
-        href: "/nosotros",
+        label: "Sobre Mí",
+        href: "/sobreMi",
     },
     {
         label: "Preguntas Frecuentes",

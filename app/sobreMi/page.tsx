@@ -46,7 +46,7 @@ const AboutPage = () => {
         <>
             <StructuredData data={createBreadcrumbSchema([
                 { name: "Inicio", url: "/" },
-                { name: "Nosotros", url: "/nosotros" }
+                { name: "Sobre Mí", url: "/sobreMi" }
             ])} />
             <StructuredData data={createOrganizationSchema()} />
             <HomeGlobalStyles />
@@ -57,7 +57,7 @@ const AboutPage = () => {
                         <Box sx={classes.heroContent}>
                             <Box sx={classes.heroBadge} className="fade-in">
                                 <Typography sx={{ fontSize: { xs: '0.85rem', md: '1rem' }, fontWeight: 600 }}>
-                                    ✨ Nuestra Historia
+                                    ✨ Mi Historia
                                 </Typography>
                             </Box>
 
@@ -66,7 +66,7 @@ const AboutPage = () => {
                                 sx={classes.heroTitle}
                                 className="fade-in-up"
                             >
-                                Nuestra Esencia
+                                Mi Esencia
                             </Typography>
 
                             <Typography
@@ -101,8 +101,7 @@ const AboutPage = () => {
                                     Hola, soy Cintia
                                 </Typography>
                                 <Typography sx={classes.paragraph}>
-                                    Mi viaje con la cerámica comenzó hace más de 5 años como un escape del ritmo
-                                    frenético de la ciudad. Lo que empezó como un taller de fin de semana se
+                                    Mi viaje con la cerámica comenzó hace más de 5 años como un escape a la rutina del día a día. Lo que empezó como un taller de fin de semana se
                                     transformó rápidamente en mi pasión y mi forma de vida.
                                 </Typography>
                                 <Typography sx={classes.paragraph}>

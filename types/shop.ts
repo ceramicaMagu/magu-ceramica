@@ -32,5 +32,6 @@ export type ShopSlice = {
     cart: Array<Cart>,
     products: Array<Product>,
     categories: Array<Category>,
+    isCartOpen: boolean,
     status: StatusMap
 };

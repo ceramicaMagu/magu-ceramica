@@ -14,6 +14,9 @@ const shopSlice = createSlice({
         setCartShop: (state, { payload }: PayloadAction<Array<Cart>>) => {
             state.cart = payload
         },
+        setCartOpen: (state, { payload }: PayloadAction<boolean>) => {
+            state.isCartOpen = payload
+        },
         addToCart: (state, { payload }: PayloadAction<Product>) => {
             const existingItem = state.cart.find(item => item.id === payload.id)
             if (existingItem) {
@@ -84,6 +87,7 @@ export const {
     refreshStateShop,
     refreshStatusShop,
     setCartShop,
+    setCartOpen,
     addToCart,
     removeFromCart,
     incrementCartItem,

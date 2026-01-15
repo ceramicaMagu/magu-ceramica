@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Box, Container } from "@mui/material";
 import NavBar from "./navBar";
 import Footer from "./footer";
+import WhatsAppButton from "./WhatsAppButton";
 import { useAppDispatch } from "@/state/redux/store";
 import { getSiteConfigAsync } from "@/state/redux/auth/thunk";
 
@@ -45,6 +46,9 @@ const LayoutWrapper = ({ children }: LayoutWrapperProps) => {
             </main>
 
             <Footer />
+
+            {/* Botón flotante de WhatsApp */}
+            <WhatsAppButton />
         </Box>
     );
 };

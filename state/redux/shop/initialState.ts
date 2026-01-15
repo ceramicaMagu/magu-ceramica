@@ -4,6 +4,7 @@ const initialState: ShopSlice = {
     cart: [],
     products: [],
     categories: [],
+    isCartOpen: false,
     status: {}
 }
 

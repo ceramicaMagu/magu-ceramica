@@ -50,12 +50,12 @@ const Home = () => {
         {
             number: "01",
             title: "Diseño y Planificación",
-            description: "Cada pieza comienza con una idea, un boceto que captura la esencia de lo que queremos crear. Diseñamos pensando en funcionalidad y belleza."
+            description: "Cada pieza comienza con una idea, un boceto que captura la esencia de lo que quiero crear. Diseño pensando en funcionalidad y belleza."
         },
         {
             number: "02",
             title: "Moldeado Artesanal",
-            description: "Con nuestras manos transformamos la arcilla en formas únicas. Cada movimiento cuenta, cada detalle importa en este proceso ancestral."
+            description: "Con mis manos transformo la arcilla en formas únicas. Cada movimiento cuenta, cada detalle importa en este proceso ancestral."
         },
         {
             number: "03",
@@ -135,7 +135,7 @@ const Home = () => {
                                 </Button>
                                 <Button
                                     component={Link}
-                                    href={ROUTES.find(r => r.label === "Nosotros")?.href || "/nosotros"}
+                                    href={ROUTES.find(r => r.label === "Sobre Mí")?.href || "/sobreMi"}
                                     variant="outlined"
                                     size="large"
                                     sx={{
@@ -153,7 +153,7 @@ const Home = () => {
                                         }
                                     }}
                                 >
-                                    Nuestra Historia
+                                    Mi Historia
                                 </Button>
                             </Box>
                         </Box>
@@ -210,10 +210,10 @@ const Home = () => {
                 <Box sx={{ ...classes.section, ...classes.processSection }}>
                     <Container maxWidth="lg">
                         <Typography variant="h2" sx={classes.sectionTitle} className="fade-in">
-                            Nuestro Proceso Artesanal
+                            Mi Proceso Artesanal
                         </Typography>
                         <Typography sx={classes.sectionSubtitle} className="fade-in">
-                            Conoce cómo transformamos la arcilla en piezas únicas llenas de historia y pasión
+                            Conoce cómo transformo la arcilla en piezas únicas llenas de historia y pasión
                         </Typography>
                         <Box sx={classes.processSteps}>
                             {processSteps.map((step, index) => (
@@ -237,7 +237,7 @@ const Home = () => {
                 <Box sx={{ ...classes.section, ...classes.aboutSection }}>
                     <Container maxWidth="lg">
                         <Typography variant="h2" sx={classes.sectionTitle} className="fade-in">
-                            Nuestra Historia
+                            Mi Historia
                         </Typography>
                         <Box sx={classes.aboutContent}>
                             <Box className="slide-in-left">
@@ -255,7 +255,7 @@ const Home = () => {
                             </Box>
                             <Box className="slide-in-right">
                                 <Typography sx={classes.aboutText}>
-                                    En Magu Cerámica, creemos que cada pieza cuenta una historia. Nuestro proceso
+                                    En Magu Cerámica, creo que cada pieza cuenta una historia. El proceso
                                     artesanal combina técnicas tradicionales con un toque contemporáneo, dando vida
                                     a objetos únicos que acompañan tus momentos especiales.
                                 </Typography>
@@ -265,19 +265,19 @@ const Home = () => {
                                     transformando lo ordinario en extraordinario.
                                 </Typography>
                                 <Typography sx={classes.aboutText}>
-                                    Trabajamos con materiales naturales y técnicas que han pasado de generación en
+                                    Trabajo con materiales naturales y técnicas que han pasado de generación en
                                     generación, fusionando la sabiduría ancestral con visiones modernas para crear
                                     piezas atemporales.
                                 </Typography>
                                 <Button
                                     component={Link}
-                                    href={ROUTES.find(r => r.label === "Nosotros")?.href || "/nosotros"}
+                                    href={ROUTES.find(r => r.label === "Sobre Mí")?.href || "/sobreMi"}
                                     variant="contained"
                                     color="primary"
                                     size="large"
                                     sx={{ mt: 2 }}
                                 >
-                                    Conoce Nuestra Historia
+                                    Conoce Mi Historia
                                 </Button>
                             </Box>
                         </Box>
@@ -288,7 +288,7 @@ const Home = () => {
                 <Box sx={{ ...classes.section, py: { xs: 8, md: 12 } }}>
                     <Container maxWidth="lg">
                         <Typography variant="h2" sx={classes.sectionTitle}>
-                            ¿Por Qué Elegirnos?
+                            ¿Por Qué Elegirme?
                         </Typography>
 
                         <Typography sx={{ ...classes.sectionSubtitle, mb: 6 }}>
@@ -346,7 +346,7 @@ const Home = () => {
                         {/* Refuerzo + CTA */}
                         <Box sx={{ textAlign: "center", mt: 8 }}>
                             <Typography sx={{ mb: 3, fontWeight: 500 }}>
-                                Más de personas ya eligieron piezas Magu para su hogar.
+                                Muchas personas ya eligieron piezas Magu para su hogar.
                             </Typography>
 
                             <Button
@@ -367,7 +367,7 @@ const Home = () => {
                 <Box sx={{ ...classes.section, ...classes.testimonialsSection }}>
                     <Container maxWidth="lg">
                         <Typography variant="h2" sx={classes.sectionTitle} className="fade-in">
-                            Lo Que Dicen Nuestros Clientes
+                            Lo Que Dicen Mis Clientes
                         </Typography>
                         <Typography sx={classes.sectionSubtitle} className="fade-in">
                             Historias reales de personas que han encontrado su pieza perfecta
@@ -391,7 +391,7 @@ const Home = () => {
                             ¿Listo para Encontrar tu Pieza Perfecta?
                         </Typography>
                         <Typography sx={classes.ctaSubtitle} className="fade-in-up-delay-1">
-                            Explora nuestra colección completa y descubre piezas únicas que transformarán
+                            Explora la colección completa y descubre piezas únicas que transformarán
                             tus espacios y llenarán tu hogar de magia.
                         </Typography>
                         <Box className="fade-in-up-delay-2">
