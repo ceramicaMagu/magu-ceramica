@@ -14,7 +14,7 @@ import { HomeGlobalStyles } from "@/app/(home)/HomeStyles";
 import StructuredData from "@/app/components/StructuredData";
 import { createBreadcrumbSchema, createOrganizationSchema } from "@/constants/seo";
 import ImgTaller from '@/public/taller.webp'
-import ImgMagu from '@/public/magu.webp'
+import ImgMagu from '@/public/cintia.webp'
 
 const AboutPage = () => {
     const values = [
