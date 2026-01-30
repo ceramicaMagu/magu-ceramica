@@ -6,7 +6,8 @@ import { supabase } from '@/utils/supabase';
 const productSchema = z.object({
     id: z.number().optional(),
     name: z.string().min(1, 'Nombre requerido').max(255),
-    image: z.string().min(1, 'Imagen requerida'), // Cambié de url() a min() para permitir base64
+    image: z.string().min(1, 'Imagen requerida'), // Imagen principal (primera del array)
+    images: z.array(z.string()).min(1, 'Al menos una imagen requerida').max(5, 'Máximo 5 imágenes permitidas'),
     price: z.number().positive('El precio debe ser positivo'),
     description: z.string().min(1, 'Descripción requerida').max(1000),
     category: z.string().min(1, 'Categoría requerida'),
@@ -90,16 +91,22 @@ export async function POST(request: NextRequest) {
             .single();
 
         if (error) {
-            throw error;
+            console.error('Error al crear producto en Supabase:', error);
+            return NextResponse.json(
+                { error: `Error al crear producto: ${error.message}` },
+                { status: 500 }
+            );
         }
 
         return NextResponse.json({
             success: true,
             product: data,
         });
-    } catch {
+    } catch (err) {
+        console.error('Error en POST /api/products:', err);
+        const message = err instanceof Error ? err.message : 'Error desconocido';
         return NextResponse.json(
-            { error: 'Error del servidor' },
+            { error: `Error del servidor: ${message}` },
             { status: 500 }
         );
     }

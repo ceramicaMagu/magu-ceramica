@@ -11,7 +11,8 @@ export type Category = {
 export type Product = {
     id: number
     name: string
-    image: string
+    image: string  // Imagen principal (primera del array)
+    images: string[]  // Array de imágenes (máximo 5)
     price: number
     description: string
     category: string

@@ -16,13 +16,15 @@ import {
     ToggleButton,
     CircularProgress,
     Snackbar,
+    Typography,
+    IconButton,
 } from "@mui/material";
-import { CloudUpload, Link as LinkIcon } from "@mui/icons-material";
+import { CloudUpload, Link as LinkIcon, Delete as DeleteIcon, Add as AddIcon } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "@/state/redux/store";
 import { addProduct, updateProduct } from "@/state/redux/shop";
 import { Product } from "@/types/shop";
 import { validateRequired, validateUrl, validatePrice } from "@/utils/validation";
-import imageCompression from 'browser-image-compression';
+import { uploadMultipleImages, deleteImageFromStorage } from "@/utils/imageUpload";
 
 // Animación de shake para campos con error
 const shakeAnimation = {
@@ -49,6 +51,7 @@ const ProductForm = ({ product, onClose, viewMode = false }: ProductFormProps) =
     const [formData, setFormData] = useState<Omit<Product, 'id'> & { id?: number }>({
         name: "",
         image: "",
+        images: [],
         price: 0,
         description: "",
         category: categories[0]?.name || "",
@@ -58,7 +61,7 @@ const ProductForm = ({ product, onClose, viewMode = false }: ProductFormProps) =
 
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-    const [imagePreview, setImagePreview] = useState<string>("");
+    const [imagePreviews, setImagePreviews] = useState<string[]>([]);
     const [uploadMethod, setUploadMethod] = useState<'url' | 'file'>('url');
     const [priceInput, setPriceInput] = useState<string>("");
     const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
@@ -70,8 +73,11 @@ const ProductForm = ({ product, onClose, viewMode = false }: ProductFormProps) =
 
     useEffect(() => {
         if (product) {
-            setFormData(product);
-            setImagePreview(product.image);
+            setFormData({
+                ...product,
+                images: product.images || [product.image].filter(Boolean),
+            });
+            setImagePreviews(product.images || [product.image].filter(Boolean));
             setPriceInput(product.price.toString());
         }
     }, [product]);
@@ -89,56 +95,114 @@ const ProductForm = ({ product, onClose, viewMode = false }: ProductFormProps) =
     };
 
     const handleImageUrlChange = (url: string) => {
-        setFormData(prev => ({ ...prev, image: url }));
-        setImagePreview(url);
+        if (!url.trim()) return;
+
+        // Validar máximo 5 imágenes
+        if (imagePreviews.length >= 5) {
+            setError('Máximo 5 imágenes permitidas');
+            return;
+        }
+
+        const newImages = [...imagePreviews, url];
+        setImagePreviews(newImages);
+        setFormData(prev => ({
+            ...prev,
+            images: newImages,
+            image: newImages[0], // Primera imagen como principal
+        }));
 
         // Limpiar error de imagen
-        if (validationErrors.image) {
+        if (validationErrors.images) {
             setValidationErrors(prev => {
                 const newErrors = { ...prev };
-                delete newErrors.image;
+                delete newErrors.images;
                 return newErrors;
             });
         }
     };
 
     const handleImageFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            // Validar tipo de archivo
-            if (!file.type.startsWith('image/')) {
-                setError('Por favor selecciona un archivo de imagen válido');
+        const files = e.target.files;
+        if (!files || files.length === 0) return;
+
+        // Validar máximo 5 imágenes
+        if (imagePreviews.length >= 5) {
+            setError('Máximo 5 imágenes permitidas');
+            return;
+        }
+
+        // Calcular cuántas imágenes se pueden agregar
+        const availableSlots = 5 - imagePreviews.length;
+        const filesToProcess = Array.from(files)
+            .filter(file => file.type.startsWith('image/'))
+            .slice(0, availableSlots);
+
+        if (filesToProcess.length === 0) {
+            setError('No se seleccionaron imágenes válidas');
+            return;
+        }
+
+        try {
+            setLoading(true);
+            setError('');
+
+            // Subir imágenes a Supabase Storage
+            const result = await uploadMultipleImages(filesToProcess, 'products', availableSlots, token || undefined);
+
+            // Mostrar errores si hubo
+            if (result.errors.length > 0) {
+                setError(result.errors.join('\n'));
+            }
+
+            if (result.urls.length === 0) {
+                setLoading(false);
                 return;
             }
 
-            try {
-                setLoading(true);
+            const updatedImages = [...imagePreviews, ...result.urls];
+            setImagePreviews(updatedImages);
+            setFormData(prev => ({
+                ...prev,
+                images: updatedImages,
+                image: updatedImages[0], // Primera imagen como principal
+            }));
 
-                // Opciones de compresión
-                const options = {
-                    maxSizeMB: 0.5, // Máximo 500KB
-                    maxWidthOrHeight: 1024, // Máximo 1024px en cualquier dimensión
-                    useWebWorker: true,
-                    fileType: 'image/jpeg' as const, // Convertir a JPEG para mejor compresión
-                };
-
-                // Comprimir imagen
-                const compressedFile = await imageCompression(file, options);
-
-                // Convertir a Base64
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    const base64String = reader.result as string;
-                    setImagePreview(base64String);
-                    setFormData(prev => ({ ...prev, image: base64String }));
-                    setLoading(false);
-                };
-                reader.readAsDataURL(compressedFile);
-            } catch (error) {
-                setError('Error al procesar la imagen');
-                setLoading(false);
+            // Limpiar errores de validación
+            if (validationErrors.images) {
+                setValidationErrors(prev => {
+                    const newErrors = { ...prev };
+                    delete newErrors.images;
+                    return newErrors;
+                });
             }
+
+            setLoading(false);
+        } catch (error) {
+            console.error('Error al procesar imágenes:', error);
+            const message = error instanceof Error ? error.message : 'Error desconocido';
+            setError(`Error inesperado: ${message}`);
+            setLoading(false);
         }
+
+        // Resetear input para permitir seleccionar las mismas imágenes nuevamente
+        e.target.value = '';
+    };
+
+    const handleDeleteImage = async (index: number) => {
+        const imageToDelete = imagePreviews[index];
+
+        // Si es una imagen de Supabase Storage, eliminarla
+        if (imageToDelete.includes('supabase')) {
+            await deleteImageFromStorage(imageToDelete, token || undefined);
+        }
+
+        const newImages = imagePreviews.filter((_, i) => i !== index);
+        setImagePreviews(newImages);
+        setFormData(prev => ({
+            ...prev,
+            images: newImages,
+            image: newImages[0] || '', // Primera imagen como principal
+        }));
     };
 
     const handlePriceChange = (value: string) => {
@@ -169,17 +233,9 @@ const ProductForm = ({ product, onClose, viewMode = false }: ProductFormProps) =
             errors.name = nameValidation.error!;
         }
 
-        // Validar imagen
-        if (uploadMethod === 'url') {
-            const imageValidation = validateUrl(formData.image, 'URL de la imagen');
-            if (!imageValidation.isValid) {
-                errors.image = imageValidation.error!;
-            }
-        } else {
-            const imageValidation = validateRequired(formData.image, 'imagen');
-            if (!imageValidation.isValid) {
-                errors.image = 'Debes seleccionar una imagen';
-            }
+        // Validar que haya al menos una imagen
+        if (!formData.images || formData.images.length === 0) {
+            errors.images = 'Debes agregar al menos una imagen';
         }
 
         // Validar categoría
@@ -298,9 +354,13 @@ const ProductForm = ({ product, onClose, viewMode = false }: ProductFormProps) =
                         sx={validationErrors.name ? shakeAnimation : {}}
                     />
 
-                    {/* Método de carga de imagen */}
+                    {/* Método de carga de imágenes */}
                     {!viewMode && (
                         <Box>
+                            <Typography variant="subtitle2" sx={{ mb: 1, color: 'text.secondary' }}>
+                                Imágenes del Producto (máximo 5)
+                            </Typography>
+
                             <ToggleButtonGroup
                                 value={uploadMethod}
                                 exclusive
@@ -321,14 +381,20 @@ const ProductForm = ({ product, onClose, viewMode = false }: ProductFormProps) =
                             {uploadMethod === 'url' ? (
                                 <TextField
                                     label="URL de la Imagen"
-                                    value={formData.image}
-                                    onChange={(e) => handleImageUrlChange(e.target.value)}
-                                    required
-                                    fullWidth
                                     placeholder="https://ejemplo.com/imagen.jpg"
-                                    helperText={validationErrors.image || "Ingresa la URL completa de la imagen"}
-                                    error={!!validationErrors.image}
-                                    sx={validationErrors.image ? shakeAnimation : {}}
+                                    fullWidth
+                                    onKeyPress={(e) => {
+                                        if (e.key === 'Enter') {
+                                            e.preventDefault();
+                                            const input = e.target as HTMLInputElement;
+                                            handleImageUrlChange(input.value);
+                                            input.value = '';
+                                        }
+                                    }}
+                                    helperText={validationErrors.images || `Presiona Enter para agregar (${imagePreviews.length}/5)`}
+                                    error={!!validationErrors.images}
+                                    disabled={imagePreviews.length >= 5}
+                                    sx={validationErrors.images ? shakeAnimation : {}}
                                 />
                             ) : (
                                 <Box>
@@ -336,62 +402,140 @@ const ProductForm = ({ product, onClose, viewMode = false }: ProductFormProps) =
                                         component="label"
                                         variant="outlined"
                                         fullWidth
-                                        startIcon={<CloudUpload />}
+                                        startIcon={<AddIcon />}
                                         sx={{
                                             py: 2,
-                                            borderColor: validationErrors.image ? 'error.main' : undefined,
-                                            color: validationErrors.image ? 'error.main' : undefined
+                                            borderColor: validationErrors.images ? 'error.main' : undefined,
+                                            color: validationErrors.images ? 'error.main' : undefined
                                         }}
-                                        disabled={loading}
+                                        disabled={loading || imagePreviews.length >= 5}
                                     >
-                                        {loading ? 'Procesando imagen...' : 'Seleccionar Imagen'}
+                                        {loading ? 'Procesando imágenes...' : `Agregar Imágenes (${imagePreviews.length}/5)`}
                                         <input
                                             type="file"
                                             hidden
                                             accept="image/*"
+                                            multiple
                                             onChange={handleImageFileChange}
                                         />
                                     </Button>
-                                    {validationErrors.image && (
+                                    {validationErrors.images && (
                                         <Box sx={{ color: 'error.main', fontSize: '0.75rem', mt: 0.5, ml: 1.75 }}>
-                                            Debes seleccionar una imagen
+                                            {validationErrors.images}
                                         </Box>
                                     )}
                                 </Box>
                             )}
 
-                            {/* Preview de la imagen */}
-                            {imagePreview && (
-                                <Box sx={{ mt: 2, textAlign: 'center' }}>
-                                    <Box
-                                        component="img"
-                                        src={imagePreview}
-                                        alt="Preview"
-                                        sx={{
-                                            maxWidth: '100%',
-                                            maxHeight: 200,
-                                            borderRadius: 2,
-                                            objectFit: 'contain',
-                                        }}
-                                    />
+                            {/* Grid de previews */}
+                            {imagePreviews.length > 0 && (
+                                <Box sx={{
+                                    mt: 2,
+                                    display: 'grid',
+                                    gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
+                                    gap: 2
+                                }}>
+                                    {imagePreviews.map((preview, index) => (
+                                        <Box
+                                            key={index}
+                                            sx={{
+                                                position: 'relative',
+                                                paddingTop: '100%',
+                                                borderRadius: 2,
+                                                overflow: 'hidden',
+                                                border: index === 0 ? '2px solid' : '1px solid',
+                                                borderColor: index === 0 ? 'primary.main' : 'divider',
+                                            }}
+                                        >
+                                            {index === 0 && (
+                                                <Box
+                                                    sx={{
+                                                        position: 'absolute',
+                                                        top: 4,
+                                                        left: 4,
+                                                        backgroundColor: 'primary.main',
+                                                        color: 'white',
+                                                        px: 1,
+                                                        py: 0.5,
+                                                        borderRadius: 1,
+                                                        fontSize: '0.65rem',
+                                                        fontWeight: 600,
+                                                        zIndex: 2,
+                                                    }}
+                                                >
+                                                    Principal
+                                                </Box>
+                                            )}
+                                            <Box
+                                                component="img"
+                                                src={preview}
+                                                alt={`Preview ${index + 1}`}
+                                                sx={{
+                                                    position: 'absolute',
+                                                    top: 0,
+                                                    left: 0,
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    objectFit: 'cover',
+                                                }}
+                                            />
+                                            <IconButton
+                                                size="small"
+                                                onClick={() => handleDeleteImage(index)}
+                                                sx={{
+                                                    position: 'absolute',
+                                                    top: 4,
+                                                    right: 4,
+                                                    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                                                    color: 'white',
+                                                    '&:hover': {
+                                                        backgroundColor: 'error.main',
+                                                    },
+                                                    zIndex: 2,
+                                                }}
+                                            >
+                                                <DeleteIcon fontSize="small" />
+                                            </IconButton>
+                                        </Box>
+                                    ))}
                                 </Box>
                             )}
                         </Box>
                     )}
 
-                    {viewMode && formData.image && (
-                        <Box sx={{ textAlign: 'center' }}>
-                            <Box
-                                component="img"
-                                src={formData.image}
-                                alt={formData.name}
-                                sx={{
-                                    maxWidth: '100%',
-                                    maxHeight: 200,
-                                    borderRadius: 2,
-                                    objectFit: 'contain',
-                                }}
-                            />
+                    {viewMode && formData.images && formData.images.length > 0 && (
+                        <Box sx={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
+                            gap: 2
+                        }}>
+                            {formData.images.map((img, index) => (
+                                <Box
+                                    key={index}
+                                    sx={{
+                                        position: 'relative',
+                                        paddingTop: '100%',
+                                        borderRadius: 2,
+                                        overflow: 'hidden',
+                                        border: '1px solid',
+                                        borderColor: 'divider',
+                                    }}
+                                >
+                                    <Box
+                                        component="img"
+                                        src={img}
+                                        alt={`${formData.name} - ${index + 1}`}
+                                        sx={{
+                                            position: 'absolute',
+                                            top: 0,
+                                            left: 0,
+                                            width: '100%',
+                                            height: '100%',
+                                            objectFit: 'cover',
+                                        }}
+                                    />
+                                </Box>
+                            ))}
                         </Box>
                     )}
 

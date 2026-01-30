@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
-import Image from "next/image";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { Product } from "@/types/shop";
+import ImageCarousel from "@/app/components/ImageCarousel";
 import classes from "./classes";
 import "./animations.css";
 
@@ -26,25 +26,21 @@ const ProductCard = ({ product, onAddToCart, animationDelay = 0 }: ProductCardPr
             style={{ animationDelay: `${animationDelay}s` }}
         >
             {/* Image Container */}
-            <Box sx={classes.productImageContainer} className="tienda-image-zoom-container">
-                <Image
-                    src={product.image}
+            <Box sx={{ position: 'relative' }}>
+                <ImageCarousel
+                    images={product.images && product.images.length > 0 ? product.images : [product.image].filter(Boolean)}
                     alt={product.name}
-                    width={400}
-                    height={300}
-                    className="tienda-image-zoom"
-                    style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '100%',
-                    }}
                 />
 
                 {/* Featured Badge */}
                 {product.featured && (
-                    <Box sx={classes.productBadge}>
+                    <Box sx={{
+                        ...classes.productBadge,
+                        position: 'absolute',
+                        top: 12,
+                        left: 12,
+                        zIndex: 3,
+                    }}>
                         Destacado
                     </Box>
                 )}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Generic } from "@/types/global";
 import { ShopSlice, Product, Category } from "@/types/shop";
 import {
